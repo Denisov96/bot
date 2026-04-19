@@ -3,7 +3,8 @@
 import telebot
 from telebot import types
 
-bot = telebot.TeleBot("8715180434:AAE8fsPfzI2g9Rml1IQYH4uJyfcLJL-PCWU")
+import os
+bot = telebot.TeleBot(os.getenv("BOT_TOKEN"))
 
 IMG_VYPUSKNIKI = "vypuskniki_profili_deyatelnosti.jpg"
 IMG_SITE_OP    = "site_op.jpg"
