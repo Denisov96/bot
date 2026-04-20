@@ -1,4 +1,5 @@
 import os
+import time
 import telebot
 from telebot import types
 
@@ -65,7 +66,7 @@ def start(message):
 def handler(message):
     text = message.text.strip()
 
-    print("USER:", text)  # 👈 важно для отладки
+    print("USER:", text)
 
     if text == "Общее описание программы «Филология»":
         bot.send_message(message.chat.id, "📘 О программе", reply_markup=submenu_general())
@@ -104,5 +105,20 @@ def handler(message):
         bot.send_message(message.chat.id, "Нажми кнопку из меню")
 
 
-# --------- ЗАПУСК ---------
-bot.infinity_polling(skip_pending=True)
+# --------- ЗАПУСК (ВАЖНЫЙ ФИКС 409) ---------
+if __name__ == "__main__":
+    print("BOT STARTING...")
+
+    # 🔥 убираем возможный webhook (очень важно)
+    try:
+        bot.remove_webhook()
+        time.sleep(1)
+    except Exception as e:
+        print("Webhook cleanup error:", e)
+
+    # 🔥 безопасный polling
+    bot.infinity_polling(
+        skip_pending=True,
+        timeout=30,
+        long_polling_timeout=30
+    )
