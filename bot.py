@@ -129,7 +129,6 @@ def handler(message):
         bot.send_message(message.chat.id, "Нажми кнопку из меню")
 
 
-# --------- ЗАПУСК ---------
 if __name__ == "__main__":
     print("BOT STARTING...")
 
@@ -140,10 +139,6 @@ if __name__ == "__main__":
         pass
 
     bot.infinity_polling(
-        skip_pending=True,
-        timeout=30,
-        long_polling_timeout=30
-    )
         skip_pending=True,
         timeout=30,
         long_polling_timeout=30
