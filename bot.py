@@ -11,6 +11,10 @@ if not TOKEN:
 bot = telebot.TeleBot(TOKEN, parse_mode="HTML")
 
 
+# 🔥 RAW GitHub (УЖЕ ИСПРАВЛЕНО ПОД ТВОЙ РЕПОЗИТОРИЙ)
+GITHUB_RAW = "https://raw.githubusercontent.com/Denisov96/bot/main/"
+
+
 # --------- КНОПКИ ---------
 def main_menu():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -68,7 +72,51 @@ def handler(message):
 
     print("USER:", text)
 
-    if text == "Общее описание программы «Филология»":
+    # 🎓 Профессии + КАРТИНКА
+    if text == "Будущие профессии🎓":
+        bot.send_photo(
+            message.chat.id,
+            photo=GITHUB_RAW + "vypuskniki_profili_deyatelnosti.jpg",
+            caption=graduates_who
+        )
+
+    # 📚 Дисциплины
+    elif text == "Ключевые дисциплины":
+        bot.send_message(message.chat.id, key_disciplines)
+
+    # 📊 ЕГЭ
+    elif text == "Баллы ЕГЭ📊":
+        bot.send_message(message.chat.id, ege_scores)
+
+    # 🌐 Сайт + КАРТИНКА
+    elif text == "Сайт ОП":
+        bot.send_photo(
+            message.chat.id,
+            photo=GITHUB_RAW + "site_op.jpg",
+            caption=site_op
+        )
+
+    # 📞 Контакты
+    elif text == "Контакты руководителя":
+        bot.send_message(message.chat.id, head_contacts)
+
+    # 🌐 Соцсети
+    elif text == "Социальные сети":
+        bot.send_message(message.chat.id, socials)
+
+    # 💬 Неофициальные + КАРТИНКА
+    elif text == "Неофициальные сообщества":
+        bot.send_photo(
+            message.chat.id,
+            photo=GITHUB_RAW + "not_official_resources.jpg",
+            caption=informal
+        )
+
+    # 🔙 меню
+    elif text == "В главное меню":
+        bot.send_message(message.chat.id, "Главное меню", reply_markup=main_menu())
+
+    elif text == "Общее описание программы «Филология»":
         bot.send_message(message.chat.id, "📘 О программе", reply_markup=submenu_general())
 
     elif text == "Официальный сайт и контакты":
@@ -77,47 +125,25 @@ def handler(message):
     elif text == "Онлайн-ресурсы 💻":
         bot.send_message(message.chat.id, "🌐 Ресурсы", reply_markup=submenu_online())
 
-    elif text == "Будущие профессии🎓":
-        bot.send_message(message.chat.id, graduates_who)
-
-    elif text == "Ключевые дисциплины":
-        bot.send_message(message.chat.id, key_disciplines)
-
-    elif text == "Баллы ЕГЭ📊":
-        bot.send_message(message.chat.id, ege_scores)
-
-    elif text == "Сайт ОП":
-        bot.send_message(message.chat.id, site_op)
-
-    elif text == "Контакты руководителя":
-        bot.send_message(message.chat.id, head_contacts)
-
-    elif text == "Социальные сети":
-        bot.send_message(message.chat.id, socials)
-
-    elif text == "Неофициальные сообщества":
-        bot.send_message(message.chat.id, informal)
-
-    elif text == "В главное меню":
-        bot.send_message(message.chat.id, "Главное меню", reply_markup=main_menu())
-
     else:
         bot.send_message(message.chat.id, "Нажми кнопку из меню")
 
 
-# --------- ЗАПУСК (ВАЖНЫЙ ФИКС 409) ---------
+# --------- ЗАПУСК ---------
 if __name__ == "__main__":
     print("BOT STARTING...")
 
-    # 🔥 убираем возможный webhook (очень важно)
     try:
         bot.remove_webhook()
         time.sleep(1)
-    except Exception as e:
-        print("Webhook cleanup error:", e)
+    except:
+        pass
 
-    # 🔥 безопасный polling
     bot.infinity_polling(
+        skip_pending=True,
+        timeout=30,
+        long_polling_timeout=30
+    )
         skip_pending=True,
         timeout=30,
         long_polling_timeout=30
